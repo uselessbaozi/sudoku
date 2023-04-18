@@ -1,7 +1,11 @@
 ﻿#include <iostream>
 using namespace std;
-int main()
+class Sukodu
 {
 
+};
+int main()
+{
+	
 	return 0;
 }
