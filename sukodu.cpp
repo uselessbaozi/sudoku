@@ -10,11 +10,11 @@ private:
 	int data[9][9];
 
 	//游玩时指针位置
-	int cursorX;
-	int cursorY;
+	int cursorRow;
+	int cursorCol;
 
 	//对单个格子进行深度优先搜索
-	bool SetSingleGrid(int x, int y);
+	bool SetSingleGrid(int y, int x, int IsCreate = 1);
 
 public:
 	Sukodu();
@@ -37,17 +37,40 @@ int main()
 	//创建数独
 	Sukodu s;
 	s.CreateSukodu();
-	//s.ShowData();
+	s.ShowData();
 	return 0;
 }
 
-bool Sukodu::SetSingleGrid(int x, int y)
+bool Sukodu::SetSingleGrid(int row, int col, int IsCreate)
 {
-	//换行
-	if (x >= 9)
+	//行位置列位置合法化
+	if (col >= 9)
 	{
-		y++;
-		x = 0;
+		row++;
+		col = 0;
+	}
+	if (row >= 9)
+		row = 0;
+
+	//若非创建时寻找下一个空格
+	if (!IsCreate)
+	{
+		int flag(0);
+		for (int i = row; i < 9; i++)
+		{
+			for (int j = col; j < 9; j++)
+				if (data[i][j] == 0)
+				{
+					col = j;
+					row = i;
+					flag = 1;
+					break;
+				}
+			if (flag)
+				break;
+		}
+		if (!flag)
+			return true;
 	}
 
 	//DFS
@@ -58,22 +81,21 @@ bool Sukodu::SetSingleGrid(int x, int y)
 		times++;
 		if (i == 9)
 			i = 0;
-		if (JudgeCanSet(x, y, i + 1))		//判断目标数据是否合法
+		if (JudgeCanSet(row, col, i + 1))		//判断目标数据是否合法
 		{
-			data[x][y] = i + 1;
-			if (x == 8 && y == 8)		//判断结尾
+			//cout << row << ' ' << col << ' ' << i + 1 << endl;
+			data[row][col] = i + 1;
+			if (col == 8 && row == 8)		//判断结尾
 				return true;
-			else
-				if (SetSingleGrid(x + 1, y))		//递归
-					return true;
-			data[x][y] = 0;
+			if (SetSingleGrid(row, col + 1, IsCreate))		//递归
+				return true;
+			data[row][col] = 0;
 		}
 	}
-	data[x][y] = 0;
 	return false;
 }
 
-Sukodu::Sukodu() :cursorX(0), cursorY(0)
+Sukodu::Sukodu() :cursorRow(0), cursorCol(0)
 {
 	for (int i = 0; i < 9; i++)
 		for (int j = 0; j < 9; j++)
@@ -85,23 +107,23 @@ void Sukodu::CreateSukodu()
 	SetSingleGrid(0, 0);
 }
 
-bool Sukodu::JudgeCanSet(int x, int y, int num)
+bool Sukodu::JudgeCanSet(int row, int col, int num)
 {
 	//行判断
 	for (int i = 0; i < 9; i++)
-		if (data[x][i] == num)
+		if (data[row][i] == num)
 			return false;
 
 	//列判断
 	for (int i = 0; i < 9; i++)
-		if (data[i][y] == num)
+		if (data[i][col] == num)
 			return false;
 
 	//块判断
-	int groupX(x - (x % 3)), groupY(y - (y % 3));
-	for (int i = groupY; i < groupY + 3; i++)
-		for (int j = groupX; j < groupX + 3; j++)
-			if (data[j][i] == num)
+	int groupRow(row - (row % 3)), groupCol(col - (col % 3));
+	for (int i = groupRow; i < groupRow + 3; i++)
+		for (int j = groupCol; j < groupCol + 3; j++)
+			if (data[i][j] == num)
 				return false;
 
 	return true;
@@ -109,6 +131,7 @@ bool Sukodu::JudgeCanSet(int x, int y, int num)
 
 void Sukodu::ShowData()
 {
+	//cmd指针移动至头部
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD cursorPos = { 0, 0 };
 	SetConsoleCursorPosition(hConsole, cursorPos);
