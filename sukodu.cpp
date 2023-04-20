@@ -2,6 +2,7 @@
 #include <ctime>
 #include <stdlib.h>
 #include <Windows.h>
+#include "MatLab/SudokuSolution.h"
 using namespace std;
 
 class Sukodu
@@ -12,6 +13,9 @@ private:
 	//游玩时指针位置
 	int cursorRow;
 	int cursorCol;
+
+	//matlab矩阵
+	mwArray sudoku;
 
 	//对单个格子进行深度优先搜索
 	bool SetSingleGrid(int y, int x, int IsCreate = 1);
@@ -27,6 +31,12 @@ public:
 
 	//输出
 	void ShowData();
+
+	//挖坑
+	void aaa();
+
+	//向sukodu添加数据
+	void AddSudolu();
 };
 
 int main()
@@ -37,6 +47,9 @@ int main()
 	//创建数独
 	Sukodu s;
 	s.CreateSukodu();
+	s.ShowData();
+	cout << endl;
+	s.aaa();
 	s.ShowData();
 	return 0;
 }
@@ -95,7 +108,7 @@ bool Sukodu::SetSingleGrid(int row, int col, int IsCreate)
 	return false;
 }
 
-Sukodu::Sukodu() :cursorRow(0), cursorCol(0)
+Sukodu::Sukodu() :cursorRow(0), cursorCol(0), sudoku(9, 9, mxDOUBLE_CLASS)
 {
 	for (int i = 0; i < 9; i++)
 		for (int j = 0; j < 9; j++)
@@ -142,5 +155,16 @@ void Sukodu::ShowData()
 			cout << data[i][j];
 		cout << endl;
 	}
+}
 
+void Sukodu::aaa()
+{
+	for (int i = 0; i < 45; i++)
+		data[rand() % 9][rand() % 9] = 0;
+}
+
+
+void Sukodu::AddSudolu()
+{
+	sudoku.SetData((int*)data, 81);
 }

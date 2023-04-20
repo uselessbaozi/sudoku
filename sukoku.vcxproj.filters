@@ -19,4 +19,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MatLab\SudokuSolution.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MatLab\SudokuSolution.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sukodu.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="MatLab\SudokuSolution.lib" />
+  </ItemGroup>
 </Project>
