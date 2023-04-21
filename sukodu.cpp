@@ -43,6 +43,8 @@ int main()
 {
 	//设置种子
 	srand(time(NULL));
+	if (!SudokuSolutionInitialize())
+		return 0;
 
 	//创建数独
 	Sukodu s;
@@ -50,6 +52,8 @@ int main()
 	s.ShowData();
 	cout << endl;
 	s.aaa();
+	s.AddSudolu();
+
 	s.ShowData();
 	return 0;
 }
@@ -167,4 +171,16 @@ void Sukodu::aaa()
 void Sukodu::AddSudolu()
 {
 	sudoku.SetData((int*)data, 81);
+	SudokuSolution(1, sudoku, sudoku);
+	cout << endl;
+	int x[81];
+	cout << endl;
+	sudoku.GetData(x, 81);
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+			cout << x[j * 9 + i] << ' ';
+		cout << endl;
+	}
+
 }
