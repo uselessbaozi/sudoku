@@ -87,10 +87,21 @@ int main()
 	srand(time(NULL));
 	SetWindowsSize(45, 60);
 	
+	//设置难度
+	int x(0);
+	cout << "set different:" << endl;
+	cin >> x;
+	while (x<=0||x>81)
+	{
+		cout << "reset different:" << endl;
+		cin >> x;
+	}
+	system("cls");
+
 	//创建数独
 	Sukodu s;
 	s.CreateSukodu();
-	s.SetQA(1);
+	s.SetQA(x);
 
 	s.Play();
 	return 0;
